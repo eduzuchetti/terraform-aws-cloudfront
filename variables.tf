@@ -1,33 +1,21 @@
-variable "AWS_REGION" {
-    type = string
+variable "cdns" {
+  description = "Map of values for multi cdns"
+  type = map(
+    object({
+      AWS_REGION            = string
+      AWS_CF_ORIGIN_ID      = string
+      AWS_CF_DESCRIPTION    = string
+      AWS_CF_ORIGIN_PATH    = string
+      AWS_CF_ROOT_OBJECT    = string
+      AWS_CF_CERTIFICATE    = string
+      AWS_R53_HOSTED_ZONE   = string
+      AWS_R53_FQDN          = string
+    })
+  )
 }
 
-variable "AWS_CF_ORIGIN_ID" {
-    type = string
-    description = "S3 origin id"
-}
-
-variable "AWS_CF_DESCRIPTION" {
-    type = string
-    description = "CloudFront description"
-}
-
-variable "AWS_R53_HOSTED_ZONE" {
-    type = string
-    description = "Root domain"
-}
-
-variable "AWS_R53_RECORD" {
-    type = string
-    description = "Subdomain"
-}
-
-variable "AWS_TAGS_Environment" {
-    type = string
-    description = "Environment Tag"
-}
-
-variable "AWS_TAGS_Name" {
-    type = string
-    description = "Name Tag"
+variable "tags" {
+  description = "Map of Tags to apply on all resources"
+  type = map
+  default = {}
 }
