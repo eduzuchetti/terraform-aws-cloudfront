@@ -1,0 +1,24 @@
+image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+variables:
+  TF_ROOT: ${CI_PROJECT_DIR}
+  TF_ADDRESS: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${CI_PROJECT_NAME}
+
+before_script:
+  - cd ${TF_ROOT}
+
+stages:
+  - prepare
+  - validate
+
+init:
+  stage: prepare
+  script:
+    - echo "Using version:"
+    - gitlab-terraform -version
+    - gitlab-terraform init
+
+validate:
+  stage: validate
+  script:
+    - gitlab-terraform init
+    - gitlab-terraform validate
