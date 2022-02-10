@@ -1,4 +1,4 @@
-branches: ['master']
+branches: ['main']
 ci: true
 debug: true
 dryRun: false
@@ -6,8 +6,8 @@ tagFormat: '${version}'
 
 # Global plugin options (will be passed to all plugins)
 preset: 'conventionalcommits'
-gitlabUrl: 'http://gitlab.mycomany.com/' # your gitlab url
-slackWebhook: 'https://slack.xxx.com/hooks/q3dtkec6yjyg9x6616o3atgkkr' # if you need slack notifies
+gitlabUrl: 'http://gitlab.com/'
+# slackWebhook: 'https://slack.xxx.com/hooks/q3dtkec6yjyg9x6616o3atgkkr' # if you need slack notifies
 
 # Responsible for verifying conditions necessary to proceed with the release:
 # configuration is correct, authentication token are valid, etc...
@@ -15,7 +15,7 @@ verifyConditions:
   - '@semantic-release/changelog'
   - '@semantic-release/git'
   - '@semantic-release/gitlab'
-  - 'semantic-release-slack-bot'
+#  - 'semantic-release-slack-bot'
 
 # Responsible for determining the type of the next release (major, minor or patch).
 # If multiple plugins with a analyzeCommits step are defined, the release type will be

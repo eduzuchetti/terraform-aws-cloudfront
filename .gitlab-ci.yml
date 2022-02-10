@@ -19,9 +19,10 @@ validate:
     - gitlab-terraform validate
 
 release:
-  image: node:alpine
+  image: node:dubnium
   stage: release
   script:
+    - add git git-core
     - npm i semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/gitlab @semantic-release/git @semantic-release/npm @semantic-release/release-notes-generator semantic-release-slack-bot
     - npx semantic-release
   only:
