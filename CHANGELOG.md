@@ -1,3 +1,10 @@
+## [1.0.0](https://gitlab.com/ezuchetti/terraform-aws-cloudfront/compare/...1.0.0) (2022-02-11)
+
+
+### Bug Fixes
+
+* **module:** publish module ([dbb3cbd](https://gitlab.com/ezuchetti/terraform-aws-cloudfront/commit/dbb3cbda631296ece796203a3ca9f7024c9a61a3))
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
