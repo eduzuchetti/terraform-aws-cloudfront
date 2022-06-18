@@ -1,6 +1,10 @@
 # Introduction 
 Module for create CloudFormation, S3 and Route53 Record for static content like web applications built in React or Vue.
 
+The original repo is on GitLab! Check here [ezuchetti/terraform-aws-cloudfront](https://gitlab.com/ezuchetti/terraform-aws-cloudfront)
+
+Also check the module in de Teraform Registry: [eduzuchetti/cloudfront/aws](https://registry.terraform.io/modules/eduzuchetti/cloudfront/aws)
+
 <br>
 
 # Whats this module creates?
