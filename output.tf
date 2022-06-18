@@ -1,33 +1,23 @@
-output "RDSInstances" {
+output "AWS_S3_BUCKET_NAME" {
    value = toset([
-    for dbinstance in aws_db_instance.dbinstances : 
-    {
-      "db_instance_identifier" = dbinstance.db_instance_identifier,
-      "engine" = dbinstance.engine,
-      "engine_version" = dbinstance.engine_version,
-      "master_username" = dbinstance.master_username,
-      "db_name" = dbinstance.db_name,
-      "multi_az" = dbinstance.multi_az,
-      "endpoint" = dbinstance.address
-    }
+    for bucket in aws_s3_bucket.cf_bucket : bucket.bucket
   ])
 }
 
-output "RDSClusters" {
+output "AWS_CF_ID" {
   value = toset([
-    for dbcluster in aws_rds_cluster.dbclusters :
-    {
-      "cluster_identifier" = dbcluster.cluster_identifier,
-      "engine" = dbcluster.engine,
-      "engine_version" = dbcluster.engine_version,
-      "master_username" = dbcluster.master_username,
-      "db_name" = dbcluster.database_name,
-      "availability_zones" = dbcluster.availability_zones,
-      "endpoint" = dbcluster.endpoint
-    }
+    for cf in aws_cloudfront_distribution.cf_distribution : cf.id
   ])
 }
 
-output "DefaultTags" {
-  value = var.tags
+output "AWS_CF_ARN" {
+  value = toset([
+    for cf in aws_cloudfront_distribution.cf_distribution : cf.arn
+  ])
+}
+
+output "AWS_CF_DOMAIN_NAME" {
+  value = toset([
+    for cf in aws_cloudfront_distribution.cf_distribution : cf.domain_name
+  ])
 }
