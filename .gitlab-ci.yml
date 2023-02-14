@@ -22,7 +22,7 @@ release:
   image: node:alpine
   stage: release
   script:
-    - apk add git git-core
+    - apk add --no-cache git
     - npm i semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/gitlab @semantic-release/git @semantic-release/npm @semantic-release/release-notes-generator semantic-release-slack-bot
     - npx semantic-release
   only:
