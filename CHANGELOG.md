@@ -1,3 +1,10 @@
+## [1.0.1](https://gitlab.com/ezuchetti/terraform-aws-cloudfront/compare/1.0.0...1.0.1) (2022-06-18)
+
+
+### Reverts
+
+* Revert "fix(module): publish module" ([75a98c4](https://gitlab.com/ezuchetti/terraform-aws-cloudfront/commit/75a98c4273f0dfcda09a2dfe1f20e72f6f953a5d))
+
 ## [1.0.0](https://gitlab.com/ezuchetti/terraform-aws-cloudfront/compare/...1.0.0) (2022-02-11)
 
 
