@@ -14,19 +14,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
-      - name: Show versions
-        run: |
-          printf "\033[0;32m +++ Node Version:" 
-          node --version
-          
-          printf "\033[0;32m +++ NPM Version:" 
-          npm --version
-
-          printf "\033[0;32m +++ NPM Whoami:" 
-          npm whoami --registry https://registry.npmjs.org/.
+          node-version: 'lts/hydrogen'
       - name: Install dependencies
         run: npm ci
       - name: Release
