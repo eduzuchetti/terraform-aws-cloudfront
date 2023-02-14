@@ -1,73 +1,124 @@
-# This rds.tf must be replaced by a module for each RDS instance.
-resource "aws_db_instance" "dbinstances" {
-  for_each = var.rds_instances
+# S3 Bucket and IAM Policies
+resource "aws_s3_bucket" "cf_bucket" {
+  for_each = var.cdns
 
-  identifier                  = each.value.db_instance_identifier
-  instance_class              = each.value.db_instance_class
+  bucket      = each.value.AWS_R53_FQDN
+  acl         = "private"
 
-  storage_type                = lookup(each.value, "storage_type", "gp2")
-  allocated_storage           = each.value.allocated_storage
-  max_allocated_storage       = lookup(each.value, "max_allocated_storage", null)
-
-  engine                      = each.value.engine
-  engine_version              = each.value.engine_version
-  license_model               = lookup(each.value, "license_model", null)
-
-  username                    = lookup(each.value, "master_username", "master")
-  password                    = each.value.master_password
-  db_name                     = each.value.db_name
-
-  vpc_security_group_ids      = lookup(each.value, "vpc_security_group_ids", null)
-  publicly_accessible         = lookup(each.value, "publicly_accessible", false)
-
-  allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
-  auto_minor_version_upgrade  = lookup(each.value, "auto_minor_version_upgrade", false)
-
-  copy_tags_to_snapshot       = lookup(each.value, "copy_tags_to_snapshot", true)
-  multi_az                    = lookup(each.value, "multi_az", false)
+  tags        = {
+    Name    = "${each.value.AWS_R53_FQDN}"
+  }
 }
 
-resource "aws_rds_cluster" "dbclusters" {
-  for_each = var.rds_clusters
+resource "aws_s3_bucket_policy" "cf_bucket" {
+  for_each = var.cdns
 
-  allocated_storage           = each.value.allocated_storage
-  storage_type                = each.value.storage_type
-  availability_zones          = each.value.availability_zones
-  allow_major_version_upgrade = each.value.allow_major_version_upgrade
-  cluster_identifier          = each.value.cluster_identifier
-  cluster_identifier_prefix   = each.value.cluster_identifier_prefix
-  copy_tags_to_snapshot       = each.value.copy_tags_to_snapshot
-  database_name               = each.value.database_name
-  db_cluster_instance_class   = each.value.db_cluster_instance_class
-  deletion_protection         = each.value.deletion_protection
-  engine                      = each.value.engine
-  engine_mode                 = each.value.engine_mode
-  engine_version              = each.value.engine_version
-  global_cluster_identifier   = each.value.global_cluster_identifier
-  iam_roles                   = each.value.iam_roles
-  iops                        = each.value.iops
-  master_password             = each.value.master_password
-  master_username             = each.value.master_username
-  vpc_security_group_ids      = each.value.vpc_security_group_ids
+  bucket = aws_s3_bucket.cf_bucket[each.key].id
+  policy = data.aws_iam_policy_document.s3_policy[each.key].json
+}
 
-  dynamic "scaling_configuration" {
-    for_each = each.value.engine_mode == "serverless" ? [1] : []
+resource "aws_s3_bucket_public_access_block" "cf_bucket" {
+  for_each = var.cdns
+  
+  bucket                  = aws_s3_bucket.cf_bucket[each.key].id
 
-    content {
-      auto_pause               = each.value.scaling_configuration.auto_pause
-      max_capacity             = each.value.scaling_configuration.max_capacity
-      min_capacity             = each.value.scaling_configuration.min_capacity
-      timeout_action           = each.value.scaling_configuration.timeout_action
-      seconds_until_auto_pause = each.value.scaling_configuration.seconds_until_auto_pause
+  block_public_acls       = true
+  block_public_policy     = true
+
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  depends_on              = [
+    aws_s3_bucket_policy.cf_bucket
+  ]
+}
+
+# CloudFront and OriginAccessIdentity
+resource "aws_cloudfront_origin_access_identity" "oai" {
+  for_each = var.cdns
+
+  comment = each.value.AWS_CF_ORIGIN_ID
+}
+
+resource "aws_cloudfront_distribution" "cf_distribution" {
+  for_each = {
+    for k, v in var.cdns : k => {
+      hosted_zone     = v.AWS_R53_HOSTED_ZONE
+      fqdn            = v.AWS_R53_FQDN
+      cf_origin_id    = v.AWS_CF_ORIGIN_ID
+      cf_description  = v.AWS_CF_DESCRIPTION
+      cf_origin_path  = v.AWS_CF_ORIGIN_PATH
+      cf_root_object  = v.AWS_CF_ROOT_OBJECT
     }
   }
 
-  dynamic "serverlessv2_scaling_configuration" {
-    for_each = each.value.engine_mode == "provisioned" ? [1] : []
+  origin {
+    domain_name = aws_s3_bucket.cf_bucket[each.key].bucket_regional_domain_name
+    origin_id   = each.value.cf_origin_id
+    origin_path = each.value.cf_origin_path
 
-    content {
-      max_capacity             = each.value.scaling_configuration.max_capacity
-      min_capacity             = each.value.scaling_configuration.min_capacity
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.oai[each.key].cloudfront_access_identity_path
     }
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = each.value.cf_description
+  default_root_object = each.value.cf_root_object
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+      locations        = []
+    }
+  }
+
+  tags = {
+    Name  = "${each.value.fqdn}"
+  }
+
+  viewer_certificate {
+    acm_certificate_arn      = data.aws_acm_certificate.cert_hosted_zone[each.key].arn
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
+  }
+
+  aliases = [each.value.fqdn]
+
+  default_cache_behavior {
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = each.value.cf_origin_id
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+    compress               = true
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  depends_on = [aws_s3_bucket.cf_bucket]
+}
+
+# Route53 Record
+resource "aws_route53_record" "cf_record" {
+  for_each  = var.cdns
+
+  zone_id   = data.aws_route53_zone.zone[each.key].zone_id
+  name      = each.value.AWS_R53_FQDN
+  type      = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.cf_distribution[each.key].domain_name
+    zone_id                = aws_cloudfront_distribution.cf_distribution[each.key].hosted_zone_id
+    evaluate_target_health = true
   }
 }
