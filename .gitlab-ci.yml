@@ -7,24 +7,19 @@ before_script:
   - cd ${TF_ROOT}
 
 stages:
-  - terraform init
-  - terraform validate
+  - validate
   - release
 
-init:
+validate:
   stage: terraform init
   script:
     - echo "Using version:"
     - gitlab-terraform -version
     - gitlab-terraform init
-
-validate:
-  stage: terraform validate
-  script:
-    - gitlab-terraform init
     - gitlab-terraform validate
 
 release:
+  image: node:alpine
   stage: release
   script:
     - npm i semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/gitlab @semantic-release/git @semantic-release/npm @semantic-release/release-notes-generator semantic-release-slack-bot
