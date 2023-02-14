@@ -21,7 +21,9 @@ jobs:
         run: |
           printf "\033[0;32m +++ Node Version:\n" 
           node --version
-        run: |
+          
+          echo -e "\n\n"
+
           printf "\033[0;32m +++ NPM Version:\n" 
           npm --version
       - name: Install dependencies
