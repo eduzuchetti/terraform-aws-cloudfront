@@ -1,17 +1,22 @@
 # Introduction 
 Module for create CloudFormation, S3 and Route53 Record for static content like web applications built in React or Vue.
 
+<br>
+
 # Whats this module creates?
 - CloudFront
 - Route53 Record
 - S3 Bucket named with DNS
 - All other related resourcess (Bucket Policies, OriginID, etc...)
 
+<br>
+
 # How to use this Module
 Create a module resource with this repo as source:
 ```
-module "cf" {
-  source = "git@gitlab.com:ezuchetti/terraform-module-aws-cloudfront.git"
+module "cloudfront" {
+  source = "eduzuchetti/cloudfront/aws"
+  version = "1.0.0"
 
   cdns = [
     "site1" = {
