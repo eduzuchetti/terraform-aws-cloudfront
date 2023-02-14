@@ -17,6 +17,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
+      - name: Show versions
+        run: |
+          printf "\033[0;32m +++ Node Version:\n" 
+          node --version
+        run: |
+          printf "\033[0;32m +++ NPM Version:\n" 
+          npm --version
       - name: Install dependencies
         run: npm ci
       - name: Release
