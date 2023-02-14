@@ -11,7 +11,7 @@ stages:
   - release
 
 validate:
-  stage: terraform init
+  stage: validate
   script:
     - echo "Using version:"
     - gitlab-terraform -version
