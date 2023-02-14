@@ -7,18 +7,32 @@ before_script:
   - cd ${TF_ROOT}
 
 stages:
-  - prepare
-  - validate
+  - terraform init
+  - terraform validate
+  - release
 
 init:
-  stage: prepare
+  stage: terraform init
   script:
     - echo "Using version:"
     - gitlab-terraform -version
     - gitlab-terraform init
 
 validate:
-  stage: validate
+  stage: terraform validate
   script:
     - gitlab-terraform init
     - gitlab-terraform validate
+
+release:
+  stage: release
+  script:
+    - npm i semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/gitlab @semantic-release/git @semantic-release/npm @semantic-release/release-notes-generator semantic-release-slack-bot
+    - npx semantic-release
+  only:
+    - master
+  except:
+    refs:
+      - tags
+    variables:
+      - $CI_COMMIT_TITLE =~ /^RELEASE:.+$/

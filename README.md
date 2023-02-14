@@ -8,20 +8,10 @@ Module for create CloudFormation, S3 and Route53 Record for static content like 
 - All other related resourcess (Bucket Policies, OriginID, etc...)
 
 # How to use this Module
-Configure you project with a aws provider
-```
-# file: providers.tf
-
-provider "aws" {
-  region = "us-east-1"
-  profile = "my-profile"
-}
-```
-
 Create a module resource with this repo as source:
 ```
 module "cf" {
-  source = "git@vs-ssh.visualstudio.com:v3/eduzuchetti/IAC/tf-aws-cloudfront"
+  source = "git@gitlab.com:ezuchetti/terraform-module-aws-cloudfront.git"
 
   cdns = [
     "site1" = {
@@ -43,9 +33,6 @@ module "cf" {
       AWS_CF_ORIGIN_PATH  = "/www"
       AWS_CF_ROOT_OBJECT  = "index.html"
       AWS_CF_CERTIFICATE  = "TLSv1.2_2021"
-    },
-    "site999" = {...}
+    }
   ]
 }
-
-```
