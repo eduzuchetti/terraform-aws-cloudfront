@@ -1,3 +1,17 @@
+## [1.0.2](https://github.com/eduzuchetti/terraform-aws-cloudfront/compare/1.0.1...1.0.2) (2023-03-15)
+
+
+### Bug Fixes
+
+* **ci:** fix semantic-release configs ([39a577b](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/39a577bf33a49ce6085c836a462b2184a390a806))
+* **ci:** fix version bumb ([1a85fe9](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/1a85fe90335b4509cc89767239229e114978f655))
+* **module:** publish module ([f6b8268](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/f6b8268621ad2f509ef064bde9ca16b2729cb03b))
+
+
+### Reverts
+
+* Revert "fix(module): publish module" ([17f94f5](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/17f94f5faf55f3e41fa6c1f74032b19357677c74))
+
 ## [1.0.1](https://gitlab.com/ezuchetti/terraform-aws-cloudfront/compare/1.0.0...1.0.1) (2022-06-18)
 
 
