@@ -1,3 +1,16 @@
+## [1.1.0](https://github.com/eduzuchetti/terraform-aws-cloudfront/compare/1.0.3...1.1.0) (2023-03-15)
+
+
+### Bug Fixes
+
+* **ci:** add env SLACK_WEBHOOK ([ac87257](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/ac87257ea214a3944854e66aa50660da8c4014d9))
+* **ci:** slackbot webhook ([814859d](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/814859dd3499f97b9ee3227f1962766494597f67))
+
+
+### Features
+
+* **ci:** add slackbot to ci ([a9e27c9](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/a9e27c9b72715d2229e3d2aff4c71f7dcf3f5710))
+
 ## [1.0.3](https://github.com/eduzuchetti/terraform-aws-cloudfront/compare/1.0.2...1.0.3) (2023-03-15)
 
 
