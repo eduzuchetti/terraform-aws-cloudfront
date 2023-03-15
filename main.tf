@@ -2,11 +2,11 @@
 resource "aws_s3_bucket" "cf_bucket" {
   for_each = var.cdns
 
-  bucket      = each.value.AWS_R53_FQDN
-  acl         = "private"
+  bucket = each.value.AWS_R53_FQDN
+  acl    = "private"
 
-  tags        = {
-    Name    = "${each.value.AWS_R53_FQDN}"
+  tags = {
+    Name = "${each.value.AWS_R53_FQDN}"
   }
 }
 
@@ -19,16 +19,16 @@ resource "aws_s3_bucket_policy" "cf_bucket" {
 
 resource "aws_s3_bucket_public_access_block" "cf_bucket" {
   for_each = var.cdns
-  
-  bucket                  = aws_s3_bucket.cf_bucket[each.key].id
 
-  block_public_acls       = true
-  block_public_policy     = true
+  bucket = aws_s3_bucket.cf_bucket[each.key].id
+
+  block_public_acls   = true
+  block_public_policy = true
 
   ignore_public_acls      = true
   restrict_public_buckets = true
 
-  depends_on              = [
+  depends_on = [
     aws_s3_bucket_policy.cf_bucket
   ]
 }
@@ -43,12 +43,12 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 resource "aws_cloudfront_distribution" "cf_distribution" {
   for_each = {
     for k, v in var.cdns : k => {
-      hosted_zone     = v.AWS_R53_HOSTED_ZONE
-      fqdn            = v.AWS_R53_FQDN
-      cf_origin_id    = v.AWS_CF_ORIGIN_ID
-      cf_description  = v.AWS_CF_DESCRIPTION
-      cf_origin_path  = v.AWS_CF_ORIGIN_PATH
-      cf_root_object  = v.AWS_CF_ROOT_OBJECT
+      hosted_zone    = v.AWS_R53_HOSTED_ZONE
+      fqdn           = v.AWS_R53_FQDN
+      cf_origin_id   = v.AWS_CF_ORIGIN_ID
+      cf_description = v.AWS_CF_DESCRIPTION
+      cf_origin_path = v.AWS_CF_ORIGIN_PATH
+      cf_root_object = v.AWS_CF_ROOT_OBJECT
     }
   }
 
@@ -75,7 +75,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
   }
 
   tags = {
-    Name  = "${each.value.fqdn}"
+    Name = "${each.value.fqdn}"
   }
 
   viewer_certificate {
@@ -110,11 +110,11 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
 
 # Route53 Record
 resource "aws_route53_record" "cf_record" {
-  for_each  = var.cdns
+  for_each = var.cdns
 
-  zone_id   = data.aws_route53_zone.zone[each.key].zone_id
-  name      = each.value.AWS_R53_FQDN
-  type      = "A"
+  zone_id = data.aws_route53_zone.zone[each.key].zone_id
+  name    = each.value.AWS_R53_FQDN
+  type    = "A"
 
   alias {
     name                   = aws_cloudfront_distribution.cf_distribution[each.key].domain_name
