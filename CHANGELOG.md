@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/eduzuchetti/terraform-aws-cloudfront/compare/1.0.2...1.0.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* **ci:** fix semantic-release configs ([2aa8ce9](https://github.com/eduzuchetti/terraform-aws-cloudfront/commit/2aa8ce99bdc373450318ce6716703190cdab789b))
+
 ## [1.0.2](https://github.com/eduzuchetti/terraform-aws-cloudfront/compare/1.0.1...1.0.2) (2023-03-15)
 
 
