@@ -10,26 +10,6 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "tagFormat": "${version}",
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/github",
-    "@semantic-release/npm",
-    {
-      "npmPublish": false
-    }
-  ],
-  "verifyConditions": [
-    "@semantic-release/changelog",
-    "@semantic-release/git",
-    "@semantic-release/github"
-  ],
-  "release": {
-    "branches": [
-      "main"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/eduzuchetti/terraform-aws-cloudfront.git"
