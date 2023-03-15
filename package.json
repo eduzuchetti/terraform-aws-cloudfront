@@ -1,6 +1,5 @@
 {
   "name": "terraform-aws-cloudfront",
-  "version": "1.0.0",
   "description": "Module for create CloudFormation, S3 and Route53 Record for static content like web applications built in React or Vue.",
   "main": "index.js",
   "scripts": {
@@ -16,9 +15,15 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/github",
-    "@semantic-release/npm", {
+    "@semantic-release/npm",
+    {
       "npmPublish": false
     }
+  ],
+  "verifyConditions": [
+    "@semantic-release/changelog",
+    "@semantic-release/git",
+    "@semantic-release/github"
   ],
   "release": {
     "branches": [
@@ -33,16 +38,24 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/eduzuchetti/terraform-aws-cloudfront/issues"
+    "url": "https://github.com/eduzuchetti/terraform-aws-cloudfront/issues"
   },
-  "homepage": "https://gitlab.com/eduzuchetti/terraform-aws-cloudfront#readme",
+  "homepage": "https://github.com/eduzuchetti/terraform-aws-cloudfront#readme",
   "dependencies": {
-    "semantic-release-cli": "^5.4.4"
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/gitlab": "^12.0.0",
+    "@semantic-release/npm": "^9.0.2",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "conventional-changelog-conventionalcommits": "^5.0.0",
+    "semantic-release-cli": "^5.4.4",
+    "semantic-release-slack-bot": "^4.0.0"
   },
   "devDependencies": {
     "@semantic-release/github": "^8.0.7",
     "cz-conventional-changelog": "^3.3.0",
     "git-cz": "^4.9.0",
-    "semantic-release": "^20.1.0"
+    "semantic-release": "^20.1.1"
   }
 }
