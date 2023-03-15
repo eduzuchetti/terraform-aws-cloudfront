@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - main
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
     environment: Default
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -17,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts/hydrogen'
+          node-version: "lts/hydrogen"
       - name: Install dependencies
         run: npm ci
       - name: Release
