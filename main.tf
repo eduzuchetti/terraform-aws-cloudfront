@@ -3,11 +3,17 @@ resource "aws_s3_bucket" "cf_bucket" {
   for_each = var.cdns
 
   bucket = each.value.AWS_R53_FQDN
-  acl    = "private"
 
   tags = {
     Name = "${each.value.AWS_R53_FQDN}"
   }
+}
+
+resource "aws_s3_bucket_acl" "cf_bucket" {
+  for_each = var.cdns
+
+  bucket = aws_s3_bucket.cf_bucket[each.key].id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "cf_bucket" {
