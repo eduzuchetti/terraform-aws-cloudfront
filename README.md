@@ -31,7 +31,7 @@ module "cloudfront" {
       AWS_CF_DESCRIPTION  = "CDN for Site1"
       AWS_CF_ORIGIN_PATH  = "/www"
       AWS_CF_ROOT_OBJECT  = "index.html"
-      AWS_CF_CERTIFICATE  = "TLSv1.2_2021"
+      AWS_CF_CERTIFICATE  = "TLSv1.3_2025"
     },
     "site2" = {
       AWS_REGION          = "us-east-1"
@@ -41,7 +41,7 @@ module "cloudfront" {
       AWS_CF_DESCRIPTION  = "CDN for Site2"
       AWS_CF_ORIGIN_PATH  = "/www"
       AWS_CF_ROOT_OBJECT  = "index.html"
-      AWS_CF_CERTIFICATE  = "TLSv1.2_2021"
+      AWS_CF_CERTIFICATE  = "TLSv1.3_2025"
     }
   ]
 }
