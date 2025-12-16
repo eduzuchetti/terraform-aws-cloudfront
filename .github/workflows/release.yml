@@ -13,4 +13,3 @@ jobs:
     with:
       sonar-scan: true
       terraform-version: 1.13.5
-      unique-environment: true

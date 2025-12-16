@@ -1,45 +1,33 @@
-branches: ['main']
+branches:
+  - name: 'main'
+    prerelease: false
 ci: true
 debug: true
 dryRun: false
-tagFormat: '${version}'
+tagFormat: 'v${version}'
 
-# Global plugin options (will be passed to all plugins)
+# Global plugin options
 preset: 'conventionalcommits'
 githubUrl: 'https://api.github.com/'
 
-verifyConditions:
-  - '@semantic-release/changelog'
-  - '@semantic-release/git'
-  - '@semantic-release/github'
-  - 'semantic-release-slack-bot'
-
-analyzeCommits:
-  - path: '@semantic-release/commit-analyzer'
-
-generateNotes:
-  - path: '@semantic-release/release-notes-generator'
-    writerOpts:
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator':
       groupBy: 'type'
       commitGroupsSort: 'title'
       commitsSort: 'header'
-    linkCompare: true
-    linkReferences: true
-
-prepare:
-  - path: '@semantic-release/changelog'
-  - path: '@semantic-release/git'
-    message: 'RELEASE: ${nextRelease.version}'
-    assets: ['CHANGELOG.md']
-
-publish:
-  - path: '@semantic-release/github'
-
-success:
+      linkCompare: true
+      linkReferences: true
+  - '@semantic-release/changelog':
+      changelogFile: 'CHANGELOG.md'
+  - '@semantic-release/git':
+      message: 'RELEASE: ${nextRelease.version}'
+      assets:
+        - 'CHANGELOG.md'
+        - 'package.json'
+  - '@semantic-release/github'
   - path: 'semantic-release-slack-bot'
+    successComment: true
+    failTitle: 'Semantic Release Failed'
     notifyOnSuccess: true
-    markdownReleaseNotes: false
-
-fail:
-  - path: 'semantic-release-slack-bot'
     notifyOnFail: true
